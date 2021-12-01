@@ -1,14 +1,14 @@
-package part
+package day
 
 import "testing"
 
 func TestDayZeroPartOne(t *testing.T) {
 	input := []string{}
 	result, err := DayZeroPartOne(input)
-	if err != nil {
+	if err == nil {
 		t.Fatal(err)
 	}
-	if result != nil {
+	if result == nil {
 		t.Fatal(err)
 	}
 }
@@ -16,10 +16,10 @@ func TestDayZeroPartOne(t *testing.T) {
 func TestDayZeroPartTwo(t *testing.T) {
 	input := []string{}
 	result, err := DayZeroPartTwo(input)
-	if err != nil {
+	if err == nil {
 		t.Fatal(err)
 	}
-	if result != nil {
+	if result == nil {
 		t.Fatal(err)
 	}
 }

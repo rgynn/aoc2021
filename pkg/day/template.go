@@ -1,4 +1,4 @@
-package part
+package day
 
 import (
 	"errors"

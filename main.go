@@ -7,7 +7,8 @@ import (
 	"log"
 	"strings"
 
-	"github.com/rgynn/aoc2021/part"
+	"github.com/rgynn/aoc2021/pkg/day"
+	"github.com/rgynn/aoc2021/pkg/part"
 )
 
 var (
@@ -24,15 +25,19 @@ func init() {
 }
 
 func main() {
+	input, err := scan(inputDay, inputPart)
+	if err != nil {
+		log.Fatal(err)
+	}
 	parts := map[int]map[int]part.AnswerFunc{
 		0: {
 			1: part.ErrorNotDefined(inputDay, inputPart),
 			2: part.ErrorNotDefined(inputDay, inputPart),
 		},
-	}
-	input, err := scan(inputDay, inputPart)
-	if err != nil {
-		log.Fatal(err)
+		1: {
+			1: day.OnePartOne,
+			2: day.OnePartTwo,
+		},
 	}
 	answer_func, ok := parts[inputDay][inputPart]
 	if !ok {
@@ -46,7 +51,7 @@ func main() {
 }
 
 func scan(day, part int) ([]string, error) {
-	path := fmt.Sprintf("inputs/part_%d_%d", day, part)
+	path := fmt.Sprintf("inputs/day_%d_%d", day, part)
 	file, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, err
