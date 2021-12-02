@@ -38,6 +38,10 @@ func main() {
 			1: day.OnePartOne,
 			2: day.OnePartTwo,
 		},
+		2: {
+			1: day.TwoPartOne,
+			2: day.TwoPartTwo,
+		},
 	}
 	answer_func, ok := parts[inputDay][inputPart]
 	if !ok {
