@@ -30,10 +30,6 @@ func main() {
 		log.Fatal(err)
 	}
 	parts := map[int]map[int]part.AnswerFunc{
-		0: {
-			1: part.ErrorNotDefined(inputDay, inputPart),
-			2: part.ErrorNotDefined(inputDay, inputPart),
-		},
 		1: {
 			1: day.OnePartOne,
 			2: day.OnePartTwo,
