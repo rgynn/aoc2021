@@ -8,9 +8,6 @@ import (
 	"strings"
 )
 
-// To guarantee victory against the giant squid, figure out which board will win first.
-// What will your final score be if you choose that board?
-
 func FourPartOne(input []string) (interface{}, error) {
 	cmds := strings.Split(input[0], ",")
 	input = clean_input(input)
@@ -30,25 +27,31 @@ func FourPartTwo(input []string) (interface{}, error) {
 	cmds := strings.Split(input[0], ",")
 	input = clean_input(input)
 	boards := parse_boards(input)
-	winners := len(boards)
+	winners := []int{}
 	for _, cmd := range cmds {
 		for i := range boards {
 			dutta(cmd, i, boards)
 			if bingo := check_bingo(i, boards); bingo {
-				winners--
-				if winners < 1 {
+				if !includes_board(i, winners) {
+					winners = append(winners, i)
+				}
+				if len(winners) == len(boards) {
 					return calc_score(i, boards, cmd)
 				}
 			}
 		}
 	}
-	return 0, nil
+	return 0, errors.New("no winner found")
 }
 
-// The score of the winning board can now be calculated.
-// Start by finding the sum of all unmarked numbers on that board;
-// in this case, the sum is 188. Then, multiply that sum by the number that was
-// just called when the board won, 24, to get the final score, 188 * 24 = 4512.
+func includes_board(i int, winners []int) bool {
+	for _, winner := range winners {
+		if i == winner {
+			return true
+		}
+	}
+	return false
+}
 
 func calc_score(i int, boards [][][]string, cmd string) (int, error) {
 	score, err := calc_score_for_board(boards[i])
