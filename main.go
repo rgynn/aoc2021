@@ -3,9 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
-	"strings"
 
 	"github.com/rgynn/aoc2021/pkg/day"
 	"github.com/rgynn/aoc2021/pkg/part"
@@ -25,7 +23,7 @@ func init() {
 }
 
 func main() {
-	input, err := scan(inputDay, inputPart)
+	input, err := part.Scan(inputDebug, false, inputDay, inputPart)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -42,6 +40,10 @@ func main() {
 			1: day.ThreePartOne,
 			2: day.ThreePartTwo,
 		},
+		4: {
+			1: day.FourPartOne,
+			2: day.FourPartTwo,
+		},
 	}
 	answer_func, ok := parts[inputDay][inputPart]
 	if !ok {
@@ -52,20 +54,4 @@ func main() {
 		log.Fatal(err)
 	}
 	fmt.Printf("day: %d, part: %d, answer: %v\n", inputDay, inputPart, answer)
-}
-
-func scan(day, part int) ([]string, error) {
-	path := fmt.Sprintf("inputs/day_%d_%d", day, part)
-	file, err := ioutil.ReadFile(path)
-	if err != nil {
-		return nil, err
-	}
-	result := strings.Split(strings.TrimSpace(string(file)), "\n")
-	if inputDebug {
-		log.Println("read input:")
-		for k, v := range result {
-			fmt.Printf("%d\t%s\n", k, v)
-		}
-	}
-	return result, nil
 }
