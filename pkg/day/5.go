@@ -1,78 +1,103 @@
 package day
 
 import (
-	"errors"
 	"regexp"
 	"strconv"
 )
 
 func FivePartOne(input []string) (interface{}, error) {
-	chart := map[int]map[int]int{}
 	lines, err := parse_lines(input)
 	if err != nil {
 		return nil, err
 	}
+	chart := [1000][1000]int{}
+	chart = chart_hv(lines, chart)
+	return calc_score_five(chart), nil
+}
+
+func FivePartTwo(input []string) (interface{}, error) {
+	lines, err := parse_lines(input)
+	if err != nil {
+		return nil, err
+	}
+	chart := [1000][1000]int{}
+	chart = chart_hv(lines, chart)
+	chart = chart_diag(lines, chart)
+	return calc_score_five(chart), nil
+}
+
+type line struct {
+	x1, y1, x2, y2 int
+}
+
+func chart_diag(lines []*line, chart [1000][1000]int) [1000][1000]int {
+	for _, line := range lines {
+		if line.x1 == line.x2 || line.y1 == line.y2 {
+			continue
+		}
+		x, y := line.x1, line.y1
+		if line.x1 > line.x2 {
+			if line.y1 < line.y2 {
+				for x >= line.x2 && y <= line.y2 {
+					chart[y][x]++
+					x--
+					y++
+				}
+			} else {
+				for x >= line.x2 && y >= line.y2 {
+					chart[y][x]++
+					x--
+					y--
+				}
+			}
+		} else {
+			if line.y1 < line.y2 {
+				for x <= line.x2 && y <= line.y2 {
+					chart[y][x]++
+					x++
+					y++
+				}
+			} else {
+				for x <= line.x2 && y >= line.y2 {
+					chart[y][x]++
+					x++
+					y--
+				}
+			}
+		}
+	}
+	return chart
+}
+
+func chart_hv(lines []*line, chart [1000][1000]int) [1000][1000]int {
 	for _, line := range lines {
 		if line.y1 == line.y2 {
 			if line.x1 < line.x2 {
 				for x := line.x1; x <= line.x2; x++ {
-					_, ok := chart[line.y1]
-					if !ok {
-						chart[line.y1] = map[int]int{}
-					}
-					_, ok = chart[line.y1][x]
-					if !ok {
-						chart[line.y1][x] = 1
-					} else {
-						chart[line.y1][x]++
-					}
+					chart[line.y1][x]++
 				}
 			} else {
 				for x := line.x2; x <= line.x1; x++ {
-					_, ok := chart[line.y1]
-					if !ok {
-						chart[line.y1] = map[int]int{}
-					}
-					_, ok = chart[line.y1][x]
-					if !ok {
-						chart[line.y1][x] = 1
-					} else {
-						chart[line.y1][x]++
-					}
+					chart[line.y1][x]++
 				}
 			}
 		}
 		if line.x1 == line.x2 {
 			if line.y1 < line.y2 {
 				for y := line.y1; y <= line.y2; y++ {
-					_, ok := chart[y]
-					if !ok {
-						chart[y] = map[int]int{}
-					}
-					_, ok = chart[y][line.x1]
-					if !ok {
-						chart[y][line.x1] = 1
-					} else {
-						chart[y][line.x1]++
-					}
+					chart[y][line.x1]++
 				}
 			} else {
 				for y := line.y2; y <= line.y1; y++ {
-					_, ok := chart[y]
-					if !ok {
-						chart[y] = map[int]int{}
-					}
-					_, ok = chart[y][line.x1]
-					if !ok {
-						chart[y][line.x1] = 1
-					} else {
-						chart[y][line.x1]++
-					}
+					chart[y][line.x1]++
 				}
 			}
 		}
 	}
-	var result int
+	return chart
+}
+
+func calc_score_five(chart [1000][1000]int) (result int) {
 	for _, row := range chart {
 		for _, n := range row {
 			if n >= 2 {
@@ -80,15 +105,7 @@ func FivePartOne(input []string) (interface{}, error) {
 			}
 		}
 	}
-	return result, nil
-}
-
-func FivePartTwo(input []string) (interface{}, error) {
-	return nil, errors.New("not implemented yet")
-}
-
-type line struct {
-	x1, y1, x2, y2 int
+	return
 }
 
 func parse_lines(input []string) (lines []*line, err error) {
