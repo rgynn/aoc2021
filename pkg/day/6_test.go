@@ -36,7 +36,7 @@ func TestSixPartTwo(t *testing.T) {
 	if !ok {
 		t.Fatal("could not cast result to int")
 	}
-	expected := 5
+	expected := 26984457539
 	if got != expected {
 		t.Fatalf("expected answer to be: %d, got: %d", expected, got)
 	}

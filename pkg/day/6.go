@@ -1,16 +1,10 @@
 package day
 
 import (
-	"errors"
 	"strconv"
 	"strings"
+	"sync"
 )
-
-// After one day, its internal timer would become 2.
-// After another day, its internal timer would become 1.
-// After another day, its internal timer would become 0.
-// After another day, its internal timer would reset to 6, and it would create a new lanternfish with an internal timer of 8.
-// After another day, the first lanternfish would have an internal timer of 5, and the second lanternfish would have an internal timer of 7.
 
 type fish struct {
 	offset int
@@ -44,7 +38,26 @@ func SixPartOne(input []string) (interface{}, error) {
 }
 
 func SixPartTwo(input []string) (interface{}, error) {
-	return nil, errors.New("not implemented yet")
+	fishes, err := parse_fishes(input)
+	if err != nil {
+		return nil, err
+	}
+	days := 256
+	for days > 0 {
+		var wg sync.WaitGroup
+		for x := 0; x < len(fishes); x++ {
+			wg.Add(1)
+			go func(x int) {
+				if new := fishes[x].tick(); new != nil {
+					fishes = append(fishes, new)
+				}
+				defer wg.Done()
+			}(x)
+		}
+		wg.Wait()
+		days--
+	}
+	return len(fishes), nil
 }
 
 func parse_fishes(input []string) (result []*fish, err error) {
