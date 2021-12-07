@@ -22,11 +22,7 @@ func TestSixPartOne(t *testing.T) {
 
 func TestSixPartTwo(t *testing.T) {
 	input := []string{
-		"3",
-		"4",
-		"3",
-		"1",
-		"2",
+		"3,4,3,1,2",
 	}
 	result, err := SixPartTwo(input)
 	if err != nil {
